@@ -11,5 +11,5 @@ export const AD_SLOT_LEFT = 'XXXXXXXXXX';       // 좌측 사이드 배너
 export const AD_SLOT_RIGHT = 'XXXXXXXXXX';      // 우측 사이드 배너
 export const AD_SLOT_INTERSTITIAL = 'XXXXXXXXXX'; // 결과 화면 전 광고
 
-// 광고 활성화 (false면 모든 광고 비표시)
-export const AD_ENABLED = true;
+// 광고 활성화 (false면 모든 광고 비표시) — 다시 켜려면 true로 변경
+export const AD_ENABLED = false;
