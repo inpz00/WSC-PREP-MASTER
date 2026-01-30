@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <!-- WSC Alpaca mascot-style icon: friendly face with ear and fluff -->
+  <defs>
+    <linearGradient id="alpaca-body" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f5f0e8"/>
+      <stop offset="100%" stop-color="#e8e0d0"/>
+    </linearGradient>
+    <linearGradient id="alpaca-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e8d48b"/>
+      <stop offset="100%" stop-color="#c9a227"/>
+    </linearGradient>
+  </defs>
+  <!-- Body / head shape -->
+  <ellipse cx="32" cy="40" rx="20" ry="18" fill="url(#alpaca-body)" stroke="#c9a227" stroke-width="1.5"/>
+  <!-- Ear -->
+  <path d="M18 22 L14 8 L22 18 Z" fill="url(#alpaca-body)" stroke="#c9a227" stroke-width="1.2"/>
+  <!-- Face patch -->
+  <ellipse cx="32" cy="38" rx="10" ry="8" fill="#fff" opacity="0.95"/>
+  <!-- Eyes -->
+  <ellipse cx="27" cy="36" rx="2.5" ry="2.8" fill="#2d1b45"/>
+  <ellipse cx="37" cy="36" rx="2.5" ry="2.8" fill="#2d1b45"/>
+  <circle cx="28" cy="35" r="0.8" fill="#fff"/>
+  <circle cx="38" cy="35" r="0.8" fill="#fff"/>
+  <!-- Nose -->
+  <ellipse cx="32" cy="42" rx="2" ry="1.5" fill="#4a2c6d"/>
+  <!-- Neck fluff (gold) -->
+  <path d="M12 38 Q8 44 14 50 Q20 46 18 40 Z" fill="url(#alpaca-gold)" opacity="0.9"/>
+  <path d="M52 38 Q56 44 50 50 Q44 46 46 40 Z" fill="url(#alpaca-gold)" opacity="0.9"/>
+</svg>
