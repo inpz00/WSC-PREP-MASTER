@@ -3,6 +3,12 @@ import { scoreAnswer } from '../data/questions';
 import { saveResult, getResultHistory } from '../lib/storage';
 import ProgressChart from './ProgressChart';
 
+/** 항상 작동하는 Study More URL (주제 + 문제 키워드로 Google 검색) */
+function getStudyMoreUrl(question) {
+  const q = `${question.subject} ${question.question}`.slice(0, 80);
+  return `https://www.google.com/search?q=${encodeURIComponent(q)}`;
+}
+
 export default function ReviewScreen({
   questions,
   answers,
@@ -196,16 +202,14 @@ export default function ReviewScreen({
                 <span className="font-medium">Correct:</span> {r.correctKey}
               </p>
               <p className="text-sm text-slate-700 mb-2">{r.question.explanation}</p>
-              {r.question.studyMoreUrl && (
-                <a
-                  href={r.question.studyMoreUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-violet-600 hover:underline font-medium"
-                >
-                  Study more →
-                </a>
-              )}
+              <a
+                href={getStudyMoreUrl(r.question)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-violet-600 hover:underline font-medium inline-block"
+              >
+                Study more →
+              </a>
               <p className="mt-2 text-sm font-medium text-amber-700">
                 Points: {r.points.toFixed(2)}
               </p>

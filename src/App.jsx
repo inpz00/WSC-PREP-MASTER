@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import SetupScreen from './components/SetupScreen';
 import QuizScreen from './components/QuizScreen';
 import ReviewScreen from './components/ReviewScreen';
+import AdBanner from './components/AdBanner';
+import AdInterstitial from './components/AdInterstitial';
 import { fetchQuestions, filterQuestions, getQuizSet, getQuizSetBalancedByDifficulty } from './data/questions';
 
 const MODES = [
@@ -76,8 +78,10 @@ export default function App() {
       answers,
       endTime,
     }));
-    setScreen('review');
+    setScreen('ad');
   };
+
+  const handleAdComplete = useCallback(() => setScreen('review'), []);
 
   const handleBackToSetup = () => {
     setScreen('setup');
@@ -116,30 +120,37 @@ export default function App() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-6">
-        {screen === 'setup' && (
-          <SetupScreen onStart={handleStart} modes={MODES} questionCount={allQuestions.length} />
-        )}
-        {screen === 'quiz' && (
-          <QuizScreen
-            questions={quizState.questions}
-            initialAnswers={quizState.answers}
-            timeLimitMinutes={config.timeLimitMinutes}
-            divisionId={config.divisionId}
-            onFinish={handleQuizFinish}
-            onExit={handleBackToSetup}
-          />
-        )}
-        {screen === 'review' && (
-          <ReviewScreen
-            questions={quizState.questions}
-            answers={quizState.answers}
-            startTime={quizState.startTime}
-            endTime={quizState.endTime}
-            onRestart={handleBackToSetup}
-          />
-        )}
-      </main>
+      <div className="flex-1 flex justify-center gap-4 w-full">
+        <AdBanner position="left" />
+        <main className="flex-1 max-w-4xl w-full px-4 py-6 min-w-0">
+          {screen === 'setup' && (
+            <SetupScreen onStart={handleStart} modes={MODES} questionCount={allQuestions.length} />
+          )}
+          {screen === 'quiz' && (
+            <QuizScreen
+              questions={quizState.questions}
+              initialAnswers={quizState.answers}
+              timeLimitMinutes={config.timeLimitMinutes}
+              divisionId={config.divisionId}
+              onFinish={handleQuizFinish}
+              onExit={handleBackToSetup}
+            />
+          )}
+          {screen === 'ad' && quizState && (
+            <AdInterstitial onComplete={handleAdComplete} />
+          )}
+          {screen === 'review' && (
+            <ReviewScreen
+              questions={quizState.questions}
+              answers={quizState.answers}
+              startTime={quizState.startTime}
+              endTime={quizState.endTime}
+              onRestart={handleBackToSetup}
+            />
+          )}
+        </main>
+        <AdBanner position="right" />
+      </div>
 
       <footer className="py-3 text-center text-sm text-slate-600">
         Scholar's Challenge practice — WSC theme 2026
