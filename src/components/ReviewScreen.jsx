@@ -3,46 +3,6 @@ import { scoreAnswer } from '../data/questions';
 import { saveResult, getResultHistory } from '../lib/storage';
 import ProgressChart from './ProgressChart';
 
-/** 문제·해설에서 핵심 키워드 추출 후 Google 검색 URL 생성 */
-function getStudyMoreUrl(question) {
-  const text = `${question.question} ${question.explanation || ''}`;
-  const keywords = new Set();
-  const stopWords = new Set(['the', 'a', 'an', 'is', 'are', 'was', 'were', 'what', 'why', 'how', 'when', 'where', 'that', 'this', 'it', 'we', 'they', 'you', 'to', 'of', 'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'must', 'can', 'so', 'than', 'but', 'and', 'or', 'if', 'because', 'about', 'into', 'which', 'who', 'some', 'more', 'most', 'other', 'only', 'such', 'both', 'each', 'than']);
-
-  // 1. 따옴표 안 문구: "progress bar", 'entropy'
-  const quoted = text.match(/['"]([^'"]{3,})['"]/g);
-  if (quoted) quoted.forEach((q) => keywords.add(q.replace(/['"]/g, '').trim()));
-
-  // 2. 대문자로 시작하는 고유명사/개념 (연속된 단어 포함): Doomsday Clock, Apollo 11
-  const words = text.split(/\s+/);
-  for (let i = 0; i < words.length; i++) {
-    const w = words[i].replace(/[^\w'\-]/g, '');
-    if (w.length > 1 && w[0] === w[0].toUpperCase() && !stopWords.has(w.toLowerCase())) {
-      let phrase = w;
-      for (let j = i + 1; j < words.length; j++) {
-        const nw = words[j].replace(/[^\w'\-]/g, '');
-        if (nw.length > 1 && nw[0] === nw[0].toUpperCase() && /^[A-Z0-9]/.test(nw)) {
-          phrase += ' ' + nw;
-          i = j;
-        } else break;
-      }
-      if (phrase.length >= 2) keywords.add(phrase);
-    }
-  }
-
-  // 3. 5글자 이상 의미 있는 단어 (progress, entropy, placebo, etc.)
-  words.forEach((w) => {
-    const clean = w.replace(/[^\w\-]/g, '').toLowerCase();
-    if (clean.length >= 5 && !stopWords.has(clean) && !/^\d+$/.test(clean)) {
-      keywords.add(clean);
-    }
-  });
-
-  const terms = [question.subject, ...Array.from(keywords)].filter(Boolean).slice(0, 8);
-  const query = terms.join(' ').slice(0, 100).trim();
-  return `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-}
-
 export default function ReviewScreen({
   questions,
   answers,
@@ -236,14 +196,16 @@ export default function ReviewScreen({
                 <span className="font-medium">Correct:</span> {r.correctKey}
               </p>
               <p className="text-sm text-slate-700 mb-2">{r.question.explanation}</p>
-              <a
-                href={getStudyMoreUrl(r.question)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-violet-600 hover:underline font-medium inline-block"
-              >
-                Study more →
-              </a>
+              {r.question.studyMoreUrl && (
+                <a
+                  href={r.question.studyMoreUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-violet-600 hover:underline font-medium"
+                >
+                  Study more →
+                </a>
+              )}
               <p className="mt-2 text-sm font-medium text-amber-700">
                 Points: {r.points.toFixed(2)}
               </p>
